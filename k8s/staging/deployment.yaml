@@ -21,7 +21,7 @@ spec:
       containers:
         - name: python-app
 
-          image: 767397660072.dkr.ecr.us-east-1.amazonaws.com/python-app
+          image: 319197018462.dkr.ecr.us-east-1.amazonaws.com/python-app
 
           imagePullPolicy: Always
 
