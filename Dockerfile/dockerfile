@@ -1,8 +1,8 @@
 FROM python:3.10-slim AS builder
 WORKDIR /app
-COPY requirements.txt .
+COPY application/requirements.txt .
 RUN pip install --no-cache-dir --trusted-host pypi.org --trusted-host files.pythonhosted.org -r requirements.txt
-COPY app.py .
+COPY application/app.py .
 
 FROM python:3.10-slim 
 WORKDIR /app
