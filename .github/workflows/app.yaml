@@ -47,6 +47,7 @@ jobs:
 
 #Build and Deploy
   build-push-deploy-staging:
+    needs: test
     if: github.event_name == 'push'
     runs-on: ubuntu-latest
 
