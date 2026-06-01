@@ -71,7 +71,7 @@ jobs:
 
       - name: Build Docker Image
         run: |
-          docker build -t $ECR_REPOSITORY:${{ github.sha }} .
+          docker build -f Dockerfile/dockerfile -t $ECR_REPOSITORY:${{ github.sha }} .
 
       - name: Container Vulnerability Scan
         uses: aquasecurity/trivy-action@master
