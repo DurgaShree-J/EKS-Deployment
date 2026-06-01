@@ -101,33 +101,10 @@ jobs:
       - name: Deploy to Staging
         run: |
           kubectl set image deployment/python-app-deployment \
-          python-app=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }} \
-          -n staging
+          python-app=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }} 
 
 
-# PRODUCTION 
-  deploy-production:
-    needs: build-push-deploy-staging
-    runs-on: ubuntu-latest
-
-    environment:
-      name: production
-
-    steps:
-      - name: Checkout Code
-        uses: actions/checkout@v4
-
-      - name: Configure AWS Credentials
-        uses: aws-actions/configure-aws-credentials@v4
-        with:
-          role-to-assume: arn:aws:iam::767397660072:role/EKS
-
-      - name: Configure kubeconfig
+       # Verify rollout
+      - name: Verify Deployment
         run: |
-          aws eks update-kubeconfig \
-            --name $EKS_CLUSTER_NAME \
-            --region $AWS_REGION
-
-      - name: Deploy to Production
-        run: |
-          kubectl apply -f k8s/production/
+          kubectl rollout status deployment/python-app-deployment
