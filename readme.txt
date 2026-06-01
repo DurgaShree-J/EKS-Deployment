@@ -149,3 +149,5 @@ Automated Backup Validation
 
 Conclusion:
 This project demonstrates an end-to-end DevOps implementation using Terraform, Docker, Kubernetes, GitHub Actions, Amazon ECR, Amazon EKS, and Amazon RDS while following Infrastructure as Code, CI/CD automation, security best practices, and scalable cloud-native deployment principles.
+
+Challenges: CloudWatch Container Insights integration with EKS required additional IAM permissions and observability add-ons. Due to assignment time constraints, infrastructure monitoring was demonstrated through AWS native EC2/RDS metrics and Kubernetes operational monitoring, while Container Insights was documented as a future enhancement.
