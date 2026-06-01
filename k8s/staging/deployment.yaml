@@ -3,7 +3,7 @@ kind: Deployment
 
 metadata:
   name: python-app-deployment
-  namespace: staging
+  # namespace: staging
 
 spec:
   replicas: 2
