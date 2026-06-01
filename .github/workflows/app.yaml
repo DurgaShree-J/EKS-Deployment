@@ -36,7 +36,8 @@ jobs:
           pip install pytest
 
       - name: Run Unit Tests
-        run: pytest
+        run: |
+          PYTHONPATH=. pytest
 
       - name: Dependency Vulnerability Scan
         uses: aquasecurity/trivy-action@master
