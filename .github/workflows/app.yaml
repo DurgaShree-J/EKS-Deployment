@@ -98,6 +98,10 @@ jobs:
             --name $EKS_CLUSTER_NAME \
             --region $AWS_REGION
 
+      - name: Ensure Kubernetes Resources Exist
+        run: |
+          kubectl apply -f k8s/staging
+
       - name: Deploy to Staging
         run: |
           kubectl set image deployment/python-app-deployment \
