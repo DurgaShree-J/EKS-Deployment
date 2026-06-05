@@ -1,5 +1,12 @@
 from flask import Flask
+from application.app import app
 
+def test_home():
+    client = app.test_client()
+
+    response = client.get("/")
+
+    assert response.status_code == 200
 app = Flask(__name__)
 
 metrics = PrometheusMetrics(app)
