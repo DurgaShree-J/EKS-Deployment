@@ -31,6 +31,7 @@ module "eks" {
   ami_type = "AL2023_x86_64_STANDARD"
 
   instance_types = ["t3.medium"]
+  max_size = 3
 }
 
 module "security_groups" {
@@ -57,3 +58,4 @@ resource "random_password" "db" {
   special = true
   override_special  = "!#$%&*()-_=+[]{}:?"
 }
+
