@@ -3,7 +3,7 @@ kind: Deployment
 
 metadata:
   name: python-app-deployment
-  namespace: prod
+  # namespace: production
 
 spec:
   replicas: 2
@@ -21,7 +21,7 @@ spec:
       containers:
         - name: python-app
 
-          image: <AWS_ACCOUNT_ID>.dkr.ecr.us-east-1.amazonaws.com/python-app:latest
+          image: 604492140645.dkr.ecr.us-east-1.amazonaws.com/python-app
 
           imagePullPolicy: Always
 
