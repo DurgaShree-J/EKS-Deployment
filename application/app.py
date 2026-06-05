@@ -1,5 +1,5 @@
 from flask import Flask
-from application.app import app
+from prometheus_flask_exporter import PrometheusMetrics
 
 def test_home():
     client = app.test_client()
