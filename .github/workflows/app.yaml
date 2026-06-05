@@ -53,7 +53,7 @@ jobs:
     runs-on: ubuntu-latest
 
     environment:
-      name: production
+      name: staging
 
     permissions:
       id-token: write
@@ -105,7 +105,7 @@ jobs:
 
       - name: Ensure Kubernetes Resources Exist
         run: |
-          kubectl apply -f k8s/prod
+          kubectl apply -f k8s/staging
 
       - name: Deploy to Staging
         run: |
@@ -118,6 +118,45 @@ jobs:
         run: |
           kubectl rollout status deployment/python-app-deployment
 
+#deploy to prod
+  deploy-production:
+
+    runs-on: ubuntu-latest
+
+    environment:
+      name: production
+
+    permissions:
+      id-token: write
+      contents: read
+
+    steps:
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Configure kubeconfig
+        run: |
+          aws eks update-kubeconfig \
+            --name $EKS_CLUSTER_NAME \
+            --region $AWS_REGION
+
+      - name: Ensure Kubernetes Resources Exist
+        run: |
+          kubectl apply -f k8s/prod
+
+      - name: Deploy Production
+        run: |
+          kubectl set image deployment/python-app-deployment \
+          python-app=${{ env.ECR_REPOSITORY }}:${{ github.sha }} 
+
+      - name: Verify Production Rollout
+        run: |
+          kubectl rollout status deployment/python-app-deployment 
+   
 
   notify-failure:
     name: Email Notification on Failure
