@@ -39,10 +39,17 @@ jobs:
         run: |
           PYTHONPATH=. pytest
 
+      # - name: List files
+      #   run: |
+      #     pwd
+      #     ls -la
+      #     find . -name "requirements.txt"
+
       - name: Dependency Vulnerability Scan
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: fs
+          scan-ref: ./application
           severity: HIGH,CRITICAL
 
 
