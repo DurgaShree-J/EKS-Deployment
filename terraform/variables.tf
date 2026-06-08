@@ -1,8 +1,8 @@
 variable "aws_region" {
-    type = string
+  type = string
 }
 variable "db_username" {
-  
+
   default = "admin"
 
 }

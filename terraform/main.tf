@@ -24,14 +24,14 @@ module "vpc" {
 module "eks" {
   source = "../modules/eks"
 
-  cluster_name        = "startup-eks"
-  vpc_id              = module.vpc.vpc_id
-  private_subnet_ids  = module.vpc.private_subnet_ids
-  public_subnet_ids   = module.vpc.public_subnet_ids
-  ami_type = "AL2023_x86_64_STANDARD"
+  cluster_name       = "startup-eks"
+  vpc_id             = module.vpc.vpc_id
+  private_subnet_ids = module.vpc.private_subnet_ids
+  public_subnet_ids  = module.vpc.public_subnet_ids
+  ami_type           = "AL2023_x86_64_STANDARD"
 
   instance_types = ["t3.medium"]
-  max_size = 3
+  max_size       = 3
 }
 
 module "security_groups" {
@@ -44,9 +44,9 @@ module "security_groups" {
 module "rds" {
   source = "../modules/rds"
 
-  project_name       = "assignment"
-  db_username        = "propone"
-  db_password        = random_password.db.result
+  project_name = "assignment"
+  db_username  = "propone"
+  db_password  = random_password.db.result
 
   private_subnet_ids = module.vpc.private_subnet_ids
   rds_sg_id          = module.security_groups.rds_sg_id
@@ -54,8 +54,8 @@ module "rds" {
 
 
 resource "random_password" "db" {
-  length  = 16
-  special = true
-  override_special  = "!#$%&*()-_=+[]{}:?"
+  length           = 16
+  special          = true
+  override_special = "!#$%&*()-_=+[]{}:?"
 }
 
