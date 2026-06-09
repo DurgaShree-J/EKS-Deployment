@@ -17,8 +17,7 @@ env:
 jobs:
 
 # TEST 
-  test:
-   
+  test: 
     runs-on: ubuntu-latest
 
     steps:
@@ -49,7 +48,7 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: fs
-          scan-ref: ./application/tests
+          scan-ref: .
           severity: HIGH,CRITICAL
 
 
@@ -138,6 +137,9 @@ jobs:
       contents: read
 
     steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
@@ -197,7 +199,7 @@ jobs:
 
           to: ${{ secrets.EMAIL_TO }}
 
-          from: GitHub Actions
+          from: dshreej455@gmail.com
 
           body: |
             CI/CD Pipeline Failure
