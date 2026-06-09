@@ -43,12 +43,15 @@ jobs:
           pwd
           ls -la
           find . -name "requirements.txt"
+          
+      - name: Update Trivy DB
+        run: trivy fs --download-db-only
 
       - name: Dependency Vulnerability Scan
-        uses: aquasecurity/trivy-action@master
+        uses: aquasecurity/trivy-action@0.28.0
         with:
           scan-type: fs
-          scan-ref: ./application
+          scan-ref: .
           scanners: vuln,secret
           severity: HIGH,CRITICAL
 
@@ -98,6 +101,8 @@ jobs:
 
       - name: List Docker images
         run: docker images
+
+
 
       - name: Container Vulnerability Scan
         uses: aquasecurity/trivy-action@master
@@ -181,7 +186,7 @@ jobs:
       - name: Deploy Production
         run: |
           kubectl set image deployment/python-app-deployment \
-          python-app=${{ env.ECR_REPOSITORY }}:${{ github.sha }} 
+          python-app=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }} 
 
       - name: Verify Production Rollout
         run: |
