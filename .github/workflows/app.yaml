@@ -173,7 +173,7 @@ jobs:
    
 
   notify-failure:
-    name: Email Notification on Failure
+    name: Slack Notification on Failure
 
     if: always()
 
@@ -185,31 +185,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Send Email
+      - name: Send Slack Message
         if: ${{ contains(needs.*.result, 'failure') }}
-        uses: dawidd6/action-send-mail@v3
-        with:
-          server_address: ${{ secrets.SMTP_SERVER }}
-          server_port: ${{ secrets.SMTP_PORT }}
-          username: ${{ secrets.SMTP_USERNAME }}
-          password: ${{ secrets.SMTP_PASSWORD }}
-
-          subject: |
-             GitHub Actions Pipeline Failed
-
-          to: ${{ secrets.EMAIL_TO }}
-
-          from: dshreej455@gmail.com
-
-          body: |
-            CI/CD Pipeline Failure
-
-            Repository: ${{ github.repository }}
-            Branch: ${{ github.ref_name }}
-            Commit: ${{ github.sha }}
-
-            Workflow: ${{ github.workflow }}
-            Run Number: ${{ github.run_number }}
-
-            Check workflow logs:
-            https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+        run: |
+          curl -X POST -H 'Content-type: application/json' \
+          --data "{
+            \"text\": \"❌ CI/CD Pipeline Failed\nRepo: ${{ github.repository }}\nBranch: ${{ github.ref_name }}\nCommit: ${{ github.sha }}\nRun: https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}\"
+          }" \
+          ${{ secrets.SLACK_WEBHOOK_URL }}
