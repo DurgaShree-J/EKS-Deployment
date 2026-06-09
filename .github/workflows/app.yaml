@@ -49,7 +49,7 @@ jobs:
         uses: aquasecurity/trivy-action@master
         with:
           scan-type: fs
-          scan-ref: ./application
+          scan-ref: ../application
           severity: HIGH,CRITICAL
 
 
@@ -151,6 +151,11 @@ jobs:
             --name $EKS_CLUSTER_NAME \
             --region $AWS_REGION
 
+      - name: List files
+        run: |
+          pwd
+          ls -R
+
       - name: Ensure Kubernetes Resources Exist
         run: |
           kubectl apply -f k8s/prod
@@ -173,6 +178,7 @@ jobs:
     needs:
       - test
       - build-push-deploy-staging
+      - deploy-production
 
     runs-on: ubuntu-latest
 
