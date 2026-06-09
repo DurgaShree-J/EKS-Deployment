@@ -173,7 +173,7 @@ jobs:
   notify-failure:
     name: Email Notification on Failure
 
-    if: failure()
+    if: always()
 
     needs:
       - test
@@ -184,6 +184,7 @@ jobs:
 
     steps:
       - name: Send Email
+        if: ${{ contains(needs.*.result, 'failure') }}
         uses: dawidd6/action-send-mail@v3
         with:
           server_address: ${{ secrets.SMTP_SERVER }}
