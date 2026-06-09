@@ -43,12 +43,12 @@ jobs:
           pwd
           ls -la
           find . -name "requirements.txt"
-          
+
       - name: Update Trivy DB
         run: trivy fs --download-db-only
 
       - name: Dependency Vulnerability Scan
-        uses: aquasecurity/trivy-action@0.28.0
+        uses: aquasecurity/trivy-action@master
         with:
           scan-type: fs
           scan-ref: .
