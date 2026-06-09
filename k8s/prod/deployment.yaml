@@ -7,6 +7,7 @@ metadata:
 
 spec:
   replicas: 2
+  
 
   selector:
     matchLabels:
@@ -16,13 +17,22 @@ spec:
     metadata:
       labels:
         app: python-app
+      
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/path: "/metrics"
+        prometheus.io/port: "5000"
 
     spec:
       containers:
         - name: python-app
 
-          image: 604492140645.dkr.ecr.us-east-1.amazonaws.com/python-app
+          image: 891376954508.dkr.ecr.us-east-1.amazonaws.com/python-app
 
+          env:
+            - name: env
+              value: prod
+              
           imagePullPolicy: Always
 
           ports:
