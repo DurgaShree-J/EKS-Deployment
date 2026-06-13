@@ -18,3 +18,11 @@ variable "private_subnet_ids" {
 variable "rds_sg_id" {
   type = string
 }
+
+variable "db_name" {
+  type = string
+}
+
+variable "common_tags" {
+  type = map(string)
+}

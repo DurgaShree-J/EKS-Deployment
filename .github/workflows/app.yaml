@@ -99,8 +99,6 @@ jobs:
       - name: List Docker images
         run: docker images
 
-
-
       - name: Container Vulnerability Scan
         uses: aquasecurity/trivy-action@master
         with:
@@ -120,8 +118,7 @@ jobs:
         run: |
           kubectl set image deployment/python-app-deployment \
           python-app=${{ steps.login-ecr.outputs.registry }}/${{ env.ECR_REPOSITORY }}:${{ github.sha }} 
-
-
+          
        # Verify rollout
       - name: Verify Deployment
         run: |

@@ -36,6 +36,12 @@ resource "aws_eks_cluster" "this" {
   depends_on = [
     aws_iam_role_policy_attachment.cluster_policy
   ]
+   tags = merge(
+     var.common_tags,
+    {
+      Name = "${var.project_name}-vpc"
+    }
+  )
 }
 
 #IAM Role for Node Group
@@ -90,4 +96,11 @@ resource "aws_eks_node_group" "nodes" {
   depends_on = [
     aws_eks_cluster.this
   ]
+
+   tags = merge(
+     var.common_tags,
+    {
+      Name = "${var.project_name}-vpc"
+    }
+  )
 }

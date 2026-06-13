@@ -1,3 +1,4 @@
 flask
 pytest
 prometheus-flask-exporter
+psycopg2-binary    #PostgreSQL driver for Python

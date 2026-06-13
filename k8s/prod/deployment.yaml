@@ -27,7 +27,7 @@ spec:
       containers:
         - name: python-app
 
-          image: 891376954508.dkr.ecr.us-east-1.amazonaws.com/python-app
+          image: 533267054305.dkr.ecr.us-east-1.amazonaws.com/python-app
 
           env:
             - name: env
@@ -64,3 +64,7 @@ spec:
             periodSeconds: 20
             timeoutSeconds: 3
             failureThreshold: 3
+
+          envFrom:
+          - secretRef:
+              name: postgres-secret

@@ -3,17 +3,24 @@ resource "aws_vpc" "main" {
   enable_dns_support = true    
   enable_dns_hostnames = true
   
-  tags = {
-    Name = "${var.project_name}-vpc"
-  }
+  tags = merge(
+     var.common_tags,
+    {
+      Name = "${var.project_name}-vpc"
+    }
+  )
+  
 }
 
 resource "aws_internet_gateway" "gw" {
   vpc_id = aws_vpc.main.id
 
-  tags = {
-    Name = "${var.project_name}-gw"
-  }
+  tags =  merge(
+     var.common_tags,
+    {
+      Name = "${var.project_name}-vpc"
+    }
+  )
 }
 
 # Public Subnet
@@ -25,13 +32,14 @@ resource "aws_subnet" "public" {
     availability_zone = var.availability_zones[count.index]
     map_public_ip_on_launch = true
 
-    tags = {
-    Name = "${var.project_name}-public-${count.index+1}"
-    
-  "kubernetes.io/role/elb" = "1"
+    tags = merge(
+     var.common_tags,
+    {
+      Name = "${var.project_name}-public-${count.index+1}"
+       "kubernetes.io/role/elb" = "1"
   "kubernetes.io/cluster/${var.project_name}" = "shared"
-
-     }
+    }
+  )
 }
 
 #Private subnet
@@ -42,23 +50,26 @@ resource "aws_subnet" "private" {
     cidr_block = var.private_subnets[count.index]
     availability_zone = var.availability_zones[count.index]
     
-
-    tags = {
-    Name = "${var.project_name}-private-${count.index+1}"
-
-     "kubernetes.io/role/internal-elb" = "1"
+tags = merge(
+     var.common_tags,
+    {
+      Name = "${var.project_name}-public-${count.index+1}"
+       "kubernetes.io/role/elb" = "1"
   "kubernetes.io/cluster/${var.project_name}" = "shared"
-
-     }
+    }
+  )
 }
 
 #Elastic IP
 resource "aws_eip" "nat" {
   domain = "vpc"
 
-  tags = {
-    Name = "${var.project_name}-nat-eip"
-  }
+  tags = merge(
+     var.common_tags,
+    {
+      Name = "${var.project_name}-vpc"
+    }
+  )
 }
 
 #NAT Gateway
@@ -66,9 +77,12 @@ resource "aws_nat_gateway" "nat" {
   allocation_id = aws_eip.nat.id
   subnet_id     = aws_subnet.public[0].id
 
-  tags = {
-    Name = "${var.project_name}-nat"
-  }
+  tags = merge(
+     var.common_tags,
+    {
+      Name = "${var.project_name}-vpc"
+    }
+  )
 
   depends_on = [
     aws_internet_gateway.gw
@@ -85,9 +99,12 @@ resource "aws_route_table" "public_route" {
     gateway_id = aws_internet_gateway.gw.id
   }
 
-  tags = {
-    Name = "${var.project_name}-public-rt"
-  }
+ tags = merge(
+     var.common_tags,
+    {
+      Name = "${var.project_name}-vpc"
+    }
+  )
 }
 
 resource "aws_route_table_association" "public-route-association" {
@@ -107,9 +124,12 @@ resource "aws_route_table" "private_route" {
     nat_gateway_id = aws_nat_gateway.nat.id
   }
 
-  tags = {
-    Name = "${var.project_name}-private-rt"
-  }
+  tags = merge(
+     var.common_tags,
+    {
+      Name = "${var.project_name}-vpc"
+    }
+  )
 }
 
 resource "aws_route_table_association" "private-route-association" {

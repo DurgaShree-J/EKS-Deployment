@@ -21,7 +21,6 @@ variable "public_subnet_ids" {
 
 variable "instance_types" {
   type    = list(string)
-  default = ["t3.medium"]
 }
 
 variable "desired_size" {
@@ -31,7 +30,7 @@ variable "desired_size" {
 
 variable "max_size" {
   type    = number
-  default = 3
+  # default = 3
 }
 
 variable "min_size" {
